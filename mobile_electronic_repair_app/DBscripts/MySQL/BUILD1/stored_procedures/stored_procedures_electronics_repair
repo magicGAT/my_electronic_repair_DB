@@ -1,0 +1,130 @@
+-- Stored Procedures Master List 
+
+-- devices table procedures
+
+-- 1- add device
+DELIMITER $$
+
+CREATE PROCEDURE devices_add_device
+	(
+		device_name VARCHAR(255),
+		manufacturer VARCHAR(255),
+		release_date DATE
+	)
+
+	BEGIN
+		INSERT INTO devices VALUES (DEFAULT, device_name, manufacturer, release_date);
+	END $$
+
+DELIMITER ;
+
+-- 2- delete device 
+--		(NOTE: DELETING A DEVICE WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN USE OF DEVICE IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE devices_remove_device
+	(
+		d_name VARCHAR(255)
+	)
+
+	BEGIN 
+		DELETE FROM devices
+		WHERE devices.device_name = d_name;
+	END $$
+
+DELIMITER ;
+
+-- tools table procedures 
+
+DELIMITER $$
+
+CREATE PROCEDURE tools_add_tool
+	(
+		tool_name VARCHAR(255),
+		manufacturer VARCHAR(255),
+		quantity INT,
+		cost_each DECIMAL(10,2),
+		item_source VARCHAR(255)
+	)
+
+	BEGIN
+		INSERT INTO tools VALUES (DEFAULT, tool_name, manufacturer, quantity, cost_each, item_source);
+	END $$
+
+DELIMITER ;
+
+-- parts table procedures 
+
+DELIMITER $$
+
+CREATE PROCEDURE
+	(
+
+	)
+
+	BEGIN
+		INSERT INTO parts VALUES ();
+	END $$
+
+DELIMITER ;
+-- customers table procedures 
+
+DELIMITER $$
+
+CREATE PROCEDURE
+	(
+
+	)
+
+	BEGIN
+		INSERT INTO parts VALUES ();
+	END $$
+
+DELIMITER ;
+
+-- technicians table procedures 
+
+DELIMITER $$
+
+CREATE PROCEDURE
+	(
+
+	)
+
+	BEGIN
+		INSERT INTO parts VALUES ();
+	END $$
+
+DELIMITER ;
+-- services table procedures
+
+DELIMITER $$
+
+CREATE PROCEDURE
+	(
+
+	)
+
+	BEGIN
+		INSERT INTO parts VALUES ();
+	END $$
+
+DELIMITER ;
+-- tools_by_service table procedures 
+
+-- parts_by_service table procedures 
+
+-- tech_details table procedures
+
+-- prof_by_tech table procedures
+
+-- customer_details table procedures
+
+-- client_devices table procedures
+
+-- service_orders table procedures
+
+-- service_que table procedures  
