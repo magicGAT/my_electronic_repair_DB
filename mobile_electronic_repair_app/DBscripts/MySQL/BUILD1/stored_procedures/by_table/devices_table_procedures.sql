@@ -1,6 +1,6 @@
 -- devices table procedures
 
--- 1- add device | permission level: 
+-- 1) Add device | permission level: 3
 
 DELIMITER $$
 
@@ -17,7 +17,7 @@ CREATE PROCEDURE devices_add_device
 
 DELIMITER ;
 
--- 2- delete device  | permission level: 
+-- 2) Delete device  | permission level: 4 
 --		(NOTE: DELETING A DEVICE WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
 -- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
 --		NOT WHEN USE OF DEVICE IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
@@ -37,7 +37,7 @@ CREATE PROCEDURE devices_remove_device
 
 DELIMITER ;
 
--- 3- update device | permission level: 
+-- 3) Update device | permission level: 3
 -- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
 -- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
 
@@ -57,26 +57,8 @@ CREATE PROCEDURE devices_update_record
 			devices.device_name = d_name, 
 			devices.manufacturer = d_manufacturer,
 			devices.release_date = d_release
-		WHERE devices.device_id = d_id; 
-	END $$
-
-DELIMITER ;
-
--- tools table procedures 
-
-DELIMITER $$
-
-CREATE PROCEDURE tools_add_tool
-	(
-		tool_name VARCHAR(255),
-		manufacturer VARCHAR(255),
-		quantity INT,
-		cost_each DECIMAL(10,2),
-		item_source VARCHAR(255)
-	)
-
-	BEGIN
-		INSERT INTO tools VALUES (DEFAULT, tool_name, manufacturer, quantity, cost_each, item_source);
+		WHERE 
+			devices.device_id = d_id; 
 	END $$
 
 DELIMITER ;
