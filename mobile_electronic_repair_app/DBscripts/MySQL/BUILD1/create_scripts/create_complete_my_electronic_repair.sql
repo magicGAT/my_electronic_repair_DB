@@ -6,11 +6,11 @@ USE my_electronic_repair;
 		(
 			device_id INT 
 				UNSIGNED NOT NULL UNIQUE 
-                AUTO_INCREMENT,
+                		AUTO_INCREMENT,
 			device_name VARCHAR(255) 
 				NOT NULL,
 			manufacturer VARCHAR(255)
-            	NOT NULL,
+            			NOT NULL,
 			release_date DATE,
 			PRIMARY KEY (device_id)
 		)
