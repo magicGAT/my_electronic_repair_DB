@@ -1,8 +1,10 @@
 -- Stored Procedures Master List 
 
+-- ---------------------------------------------------------------------------------------------------
 -- devices table procedures
 
--- 1- add device
+-- 1) Add device | permission level: 2
+
 DELIMITER $$
 
 CREATE PROCEDURE devices_add_device
@@ -18,7 +20,7 @@ CREATE PROCEDURE devices_add_device
 
 DELIMITER ;
 
--- 2- delete device 
+-- 2) Delete device  | permission level: 3 
 --		(NOTE: DELETING A DEVICE WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
 -- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
 --		NOT WHEN USE OF DEVICE IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
@@ -35,96 +37,510 @@ CREATE PROCEDURE devices_remove_device
 		WHERE devices.device_name = d_name;
 	END $$
 
+
 DELIMITER ;
 
+-- 3) Update device | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE devices_update_record
+	(
+		d_id INT, 
+		d_name VARCHAR(255),
+		d_manufacturer VARCHAR(255),
+		d_release DATE 
+	)
+
+	BEGIN
+		UPDATE devices 
+		SET 
+			devices.device_name = d_name, 
+			devices.manufacturer = d_manufacturer,
+			devices.release_date = d_release
+		WHERE 
+			devices.device_id = d_id; 
+	END $$
+
+DELIMITER ;
+
+-- ---------------------------------------------------------------------------------------------------
 -- tools table procedures 
+
+-- 1) Add tool | permission level: 2
 
 DELIMITER $$
 
 CREATE PROCEDURE tools_add_tool
 	(
-		tool_name VARCHAR(255),
-		manufacturer VARCHAR(255),
-		quantity INT,
-		cost_each DECIMAL(10,2),
-		item_source VARCHAR(255)
+		t_name VARCHAR(255),
+		t_manufacturer VARCHAR(255),
+		t_quantity INT,
+		t_cost DECIMAL(10,2),
+		t_source VARCHAR(255)
 	)
 
 	BEGIN
-		INSERT INTO tools VALUES (DEFAULT, tool_name, manufacturer, quantity, cost_each, item_source);
+		INSERT INTO tools VALUES (DEFAULT, t_name, t_manufacturer, t_quantity, t_cost, t_source);
 	END $$
 
 DELIMITER ;
 
+-- 2) Delete tool  | permission level: 3
+--		(NOTE: DELETING A TOOL WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN USE OF A TOOL IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE tools_delete_tool
+	(
+		t_name VARCHAR(255)
+	)
+
+	BEGIN
+		DELETE FROM tools
+		WHERE tools.tool_name = t_name;
+	END $$
+
+DELIMITER ;
+
+-- 3) Update tool | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE tools_update_record
+	(
+		t_id INT,
+		t_name VARCHAR(50),
+		t_manufacturer VARCHAR(50),
+		t_quantity INT,
+		t_cost DECIMAL(10,2),
+		t_source VARCHAR(255)
+	)
+
+	BEGIN
+		UPDATE tools
+		SET
+			tools.tool_name = t_name,
+			tools.manufacturer = t_manufacturer,
+			tools.quantity = t_quantity,
+			tools.cost_each = t_cost,
+			tools.item_source = t_source
+		WHERE 
+			tools.tool_id = t_id; 
+	END $$
+
+DELIMITER ;
+
+-- ---------------------------------------------------------------------------------------------------
 -- parts table procedures 
 
+-- 1) Add part | permission level: 2
+
 DELIMITER $$
 
-CREATE PROCEDURE
+CREATE PROCEDURE parts_add_part
 	(
-
+		p_name VARCHAR(255),
+		p_manufacturer VARCHAR(255),
+		p_quantity INT,
+		p_cost DECIMAL(10,2),
+		p_source VARCHAR(255)
 	)
 
 	BEGIN
-		INSERT INTO parts VALUES ();
+		INSERT INTO parts VALUES (DEFAULT, p_name, p_manufacturer, p_quantity, p_cost, p_source);
 	END $$
 
 DELIMITER ;
+
+-- 2) Delete part  | permission level: 3 
+--		(NOTE: DELETING A PART WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN USE OF A PART IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE parts_delete_part
+	(
+		p_name VARCHAR(255)
+	)
+
+	BEGIN
+		DELETE FROM parts
+		WHERE parts.part_name = p_name;
+	END $$
+
+DELIMITER ;
+
+-- 3) Update part | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE parts_update_record 
+	(
+		p_id INT,
+		p_name VARCHAR(50),
+		p_manufacturer VARCHAR(50),
+		p_quantity INT,
+		p_cost DECIMAL (10,2),
+		p_source VARCHAR(50)
+	)
+
+	BEGIN
+		UPDATE parts
+		SET
+			parts.part_name = p_name,
+			parts.manufacturer = p_manufacturer,
+			parts.quantity = p_quantity,
+			parts.cost_each = p_cost,
+			parts.item_source = p_source
+		WHERE 
+			parts.part_id = p_id;
+	END $$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------------------
 -- customers table procedures 
 
+-- 1) Add customer | permission level: 2
+
 DELIMITER $$
 
-CREATE PROCEDURE
+CREATE PROCEDURE customers_add_customer
 	(
-
+		c_fname VARCHAR(255),
+		c_lname VARCHAR(255),
+		c_email VARCHAR(255),
+		c_phone VARCHAR(50),
+		c_lead BOOLEAN,
+		c_active BOOLEAN
 	)
 
 	BEGIN
-		INSERT INTO parts VALUES ();
+		INSERT INTO customers VALUES (DEFAULT, c_fname, c_lname, c_email, c_phone, c_lead, c_active);
 	END $$
 
 DELIMITER ;
 
+-- 2) Delete customer  | permission level: 3
+--		(NOTE: DELETING A CUSTOMER WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN CUSTOMER BECOMES INACTIVE. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE customers_delete_customer 
+	(
+		c_fname VARCHAR (255),
+		c_lname VARCHAR (255)
+	)
+
+	BEGIN
+		DELETE FROM customers
+		WHERE 
+			customers.first_name = c_fname 
+			AND
+			customers.last_name = c_lname;
+	END $$
+
+DELIMITER ;
+
+-- 3) Update customer | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE customers_update_record
+	(
+		c_id INT,
+		c_fname VARCHAR(255),
+		c_lname VARCHAR(255),
+		c_email VARCHAR(255),
+		c_phone VARCHAR(50),
+		c_lead BOOLEAN,
+		c_active BOOLEAN
+	)
+
+	BEGIN
+		UPDATE customers
+		SET 
+			customers.first_name = c_fname,
+			customers.last_name = c_lname,
+			customers.email = c_email,
+			customers.phone = c_phone,
+			customers.lead_stat = c_lead,
+			customers.active_stat = c_active
+		WHERE 
+			customers.customer_id = c_id;
+	END $$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------------------
 -- technicians table procedures 
 
+-- 1) Add technician | permission level: 2
+
 DELIMITER $$
 
-CREATE PROCEDURE
+CREATE PROCEDURE technicians_add_technician
 	(
-
+		t_fname VARCHAR(50),
+		t_lname VARCHAR(50)
 	)
 
 	BEGIN
-		INSERT INTO parts VALUES ();
+		INSERT INTO technicians VALUES (DEFAULT, t_fname, t_lname);
 	END $$
 
 DELIMITER ;
+
+-- 2) Delete technician  | permission level: 3
+--		(NOTE: DELETING A TECHNICIAN WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN A TECHNICIAN LEAVES EMPLOYMENT AT YOUR BUSINESS. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE technicians_delete_technician
+	(
+		t_fname VARCHAR(255),
+		t_lname VARCHAR(255)
+	)
+
+	BEGIN
+		DELETE FROM technicians
+		WHERE 
+			technicians.first_name = t_fname
+			AND
+			technicians.last_name = t_lname;
+	END $$
+
+DELIMITER ;
+
+-- 3) Update technician | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE technicians_update_record
+	(
+		t_id INT,
+		t_fname VARCHAR(50),
+		t_lname VARCHAR(50)
+	)
+
+	BEGIN
+		UPDATE technicians 
+		SET
+			technicians.first_name = t_fname,
+			technicians.last_name = t_lname
+		WHERE 
+			technicians.tech_id = t_id;
+	END $$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------------------
 -- services table procedures
 
+-- 1) Add service | permission level: 2
+
 DELIMITER $$
 
-CREATE PROCEDURE
+CREATE PROCEDURE services_add_service
 	(
-
+		s_device_id INT,
+		s_name VARCHAR(255),
+		s_price DECIMAL(10,2),
+		s_point_value INT
 	)
 
 	BEGIN
-		INSERT INTO parts VALUES ();
+		INSERT INTO services VALUES (DEFAULT, s_device_id, s_name, s_price, s_point_value);
 	END $$
 
 DELIMITER ;
+
+-- 2) Delete service  | permission level: 3
+--		(NOTE: DELETING A SERVICE WILL DELETE ALL ASSOCIATED RECORDS THROUGHOUT YOUR DATABASE
+-- 		ONLY USE THIS COMMAND IF ERRORS ARE MADE AT THE TIME OF INSERTION (ex. spelling errors), 
+--		NOT WHEN A SERVICE IS DISCONTINUED. OTHERWISE, HISTORICAL DATA WILL BE LOST)
+
+DELIMITER $$
+
+CREATE PROCEDURE services_delete_service 
+	(
+		s_name VARCHAR(255)
+	)
+
+	BEGIN
+		DELETE FROM services
+		WHERE services.service_name = s_name;
+	END $$
+
+DELIMITER ;
+
+-- 3) Update service | permission level: 2
+-- 		(NOTE: THIS IS THE PREFERRED METHOD OF ALTERING RECORDS WITHIN THIS TABLE. IT WILL
+-- 		NOT COMPROMISE HISTORICAL DATA BY DELETING ASSOCIATED RECORDS IN OTHER TABLES)
+
+DELIMITER $$
+
+CREATE PROCEDURE services_update_record
+	(
+		s_id INT,
+		s_device_id INT,
+		s_name VARCHAR(255),
+		s_price DECIMAL(10,2),
+		s_point_value INT
+	)
+
+	BEGIN
+		UPDATE services 
+		SET
+			services.device_id = s_device_id,
+			services.service_name = s_name,
+			services.price = s_price,
+			services.point_value = s_point_value
+		WHERE 
+			services.service_id = s_id;
+	END $$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------------------
 -- tools_by_service table procedures 
 
--- parts_by_service table procedures 
+-- 1) Add tool/service relationship 
 
+DELIMITER $$
+
+CREATE PROCEDURE tools_by_service_add_relationship
+	(
+		s_id INT,
+		t_id INT
+	)
+	BEGIN
+		INSERT INTO tools_by_service VALUES (s_id, t_id);
+	END $$
+
+DELIMITER ; 
+
+-- 2) Delete tool/service relationship 
+
+DELIMITER $$
+	
+CREATE PROCEDURE tools_by_service_delete_relationship
+	(
+		s_id INT,
+		t_id INT
+	) 
+	
+	BEGIN
+		DELETE FROM tools_by_service
+		WHERE 
+			tools_by_service.service_id = s_id
+			AND
+			tools_by_service.tool_id = t_id;  
+	END $$
+
+DELIMITER ;
+-- ---------------------------------------------------------------------------------------------------
+-- parts_by_service table procedures
+
+-- 1) Add part/service relationship 
+
+DELIMITER $$
+
+CREATE PROCEDURE parts_by_service_add_relationship
+	(
+		s_id INT,
+		p_id INT
+	)
+	BEGIN
+		INSERT INTO parts_by_service VALUES (s_id, p_id);
+	END $$
+
+DELIMITER ; 
+
+-- 2) Delete part/service relationship 
+
+DELIMITER $$
+	
+CREATE PROCEDURE parts_by_service_delete_relationship
+	(
+		s_id INT,
+		p_id INT
+	) 
+	
+	BEGIN
+		DELETE FROM parts_by_service
+		WHERE 
+			tools_by_service.service_id = s_id
+			AND
+			tools_by_service.part_id = p_id;  
+	END $$
+
+DELIMITER ;
+
+
+-- ---------------------------------------------------------------------------------------------------
 -- tech_details table procedures
 
+-- ---------------------------------------------------------------------------------------------------
 -- prof_by_tech table procedures
 
+-- ---------------------------------------------------------------------------------------------------
 -- customer_details table procedures
 
+-- ---------------------------------------------------------------------------------------------------
 -- client_devices table procedures
 
+-- 1) Add client/device relationship
+
+DELIMITER $$
+
+CREATE PROCEDURE client_device_add_relationship
+	(
+		c_id INT,
+		d_id INT
+	)
+	BEGIN
+		INSERT INTO client_devices VALUES (c_id, d_id, curdate());
+	END $$
+
+DELIMITER ; 
+
+-- 2) Delete client/device relationship 
+
+DELIMITER $$
+	
+CREATE PROCEDURE client_device_delete_relationship
+	(
+		c_id INT,
+		d_id INT
+	) 
+	
+	BEGIN
+		DELETE FROM client_devices 
+		WHERE 
+			client_devices.customer_id = c_id
+			AND
+			client_devices.device_id = d_id;  
+	END $$
+
+DELIMITER ;
+
+-- ---------------------------------------------------------------------------------------------------
 -- service_orders table procedures
 
+-- ---------------------------------------------------------------------------------------------------
 -- service_que table procedures  
